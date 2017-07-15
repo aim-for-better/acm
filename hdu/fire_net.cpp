@@ -14,38 +14,47 @@ int nmax;
 
 
 
-bool dfs(int x,int y,int num){
+void dfs(int pos,int num){
 
 
-    if(arr[x][y]=='X') return ;
+    int x=pos/n;
+    int y=pos%n;
+
+    if(arr[x][y]=='X'|| visited[x][y]) return ;
 
 
-     for(int k=0;k<4;k++){
+    int buf[4][4];
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++)
+            buf[i][j]=visited[i][j];
+    }
+
+    visited[x][y]=true;
+
+    for(int k=0;k<4;k++){
 
          int nx=x+dir[k][0];
          int ny=y+dir[k][1];
 
-         if(nx<0||nx>=n||ny<0||ny>=n)continue;
 
-
-         if(arr[nx][ny]=='X')continue ;
-
-        if(!visited[nx][ny]){
+        for(;nx>=0&&nx<n&&ny>=0&&ny<n&&arr[nx][ny]!='X';nx+=dir[k][0],ny+=dir[k][1]){
 
             visited[nx][ny]=true;
-
-
-            dfs(nx,ny,num);
-
         }
-
-
-
 
      }
 
+     if(1+num>nmax) nmax=1+num;
 
-     return true ;
+
+     for(int i=0;i<n*n;i++)dfs(i,1+num);
+
+     for(int i=0;i<n;i++)
+        for(int j=0;j<n;j++)
+            visited[i][j]=buf[i][j];
+
+     return  ;
 }
 
 int main()
@@ -66,7 +75,11 @@ int main()
                 cin>>arr[i][j];
             }
         }
-        init();
+
+        for(int i=0;i<n*n;i++){
+            dfs(i,0);
+        }
+
         cout<<nmax<<endl;
     }
 
