@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1496996926 source:/home/zzy/codeC/starship troppers/main.cpp
+	<iostream>
+	<vector>
+	<cstdio>
+	<cstring>
+
