@@ -191,13 +191,49 @@ void query(int k){
 int main()
 {
     int n;
+    int l,r;
+     char ch;
+     int cnt;
+     int a[maxn];
     while(scanf("%d",&n)!=EOF){
-
+        cnt=0;
         for(int i=0;i<n;i++){
 
+            scanf("%d%d %c",&l,&r,&ch);
+//            if(l>r){
+//                l=l+r;
+//                r=l-r;
+//                l=l-r;
+//            }
+//
 
+            if(ch=='w') mark[i].op=1;
+            else if(ch=='b') mark[i].op=0;
+
+            b[cnt].x=l;
+            b[cnt].id=i;
+            b[cnt++].dir=-1;
+            b[cnt].x=r;
+            b[cnt].id=i;
+            b[cnt++].dir=1;
         }
+        //
+        sort(b,b+cnt,cmp);
 
+        if(b[0].dir==-1) mark[b[0].id].l=b[0].x;
+        else if(b[0].dir==1) mark[b[0].id].r=b[0].x;
+
+        a[1]=b[0].x;
+        m=1;
+
+        for(int i=1;i<cnt;i++){
+
+            if(b[i].x!=b[i-1].x){
+
+                m++;
+                a[m]
+            }
+        }
 
     }
     return 0;
