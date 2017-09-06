@@ -40,7 +40,7 @@ int bfs(int ssx,int ssy){
     queue<Node>q ;
     while(!q.empty()) q.pop();
 
-    memset(dis,INF,sizeof(dis));
+   for(int i=0;i<n;i++)for(int j=0;j<m;j++) dis[i][j]=INF;
 
     q.push(tmp);
     dis[ssx][ssy]=0;
@@ -57,15 +57,11 @@ int bfs(int ssx,int ssy){
         q.pop();
         x=now.x;
         y=now.y;
-
-        printf("the x is: %d  the y is %d\n",x,y);
         for(int i=0;i<4;i++){
 
             xx=x+dir[i][0];
             yy=y+dir[i][1];
-
             if(xx>=n||xx<0||yy>=m||yy<0||g[xx][yy]=='#') continue;
-
             if(xx==ex&&yy==ey){
                 if(g[x][y]=='x') dis[xx][yy]=2+now.step;
                 else dis[x][yy]= 1+now.step;
@@ -141,8 +137,8 @@ int main()
                 if(g[i][j]=='a') ex=i,ey=j;
             }
         }
-        memset(visited,false,sizeof(visited));
-        memset(dp,-1,sizeof(dp));
+//        memset(visited,false,sizeof(visited));
+//        memset(dp,-1,sizeof(dp));
         //dfs
         visited[sx][sy]=true;
 
@@ -150,6 +146,8 @@ int main()
        // printf("%d\n",dp[sx][sy]);
         int ans=0;
         ans=bfs(sx,sy);
+        if(ans==INF) printf("Poor ANGEL has to stay in the prison all his life.\n");
+        else
         printf("%d\n",ans);
     }
     return 0;
