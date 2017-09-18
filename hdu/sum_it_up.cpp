@@ -1,77 +1,50 @@
-#include <iostream>
-#include<cstdio>
-#include<cstring>
-#include<stack>
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
 using namespace std;
-const int maxn=15;
-
-int t;
-int n;
-int a[maxn];
-bool visited[maxn];
-int pre[maxn];
-
-void show(int i){
-
-    stack<int> st;
-    while(!st.empty()) st.pop();
-
-    st.push(a[i]);
-    while(pre[i]!=-1){
-
-        i=pre[i];
-        st.push(i);
-    }
-
-    printf("%d",st.top());
-    st.pop();
-    while(!st.empty()){
-        printf("+%d",st.top());
-        st.pop();
-    }
-    printf("\n");
-}
-
-void dfs(int sum,int i){
-
-    if(sum+a[i]==t){
-
-        //print
-        show(i);
-        return;
-    }
-
-    if(sum+a[i]>t){
+int map[15],v[15],ans[15];
+int sum,n,flag;
+void dfs(int x,int num,int cur)
+{
+    int i;
+    if(num == sum)
+    {
+        printf("%d",map[ ans[0] ]);
+        for(i = 1 ; i < cur ; i ++)
+        printf("+%d",map[ ans[i] ]);
+        printf("\n");
+        flag = 1;
         return ;
     }
-    for(int j=i+1;j<n;j++){
-
-        pre[j]=i;
-        dfs(sum+a[i],j);
-        pre[j]=-1;
-    }
-
-    return ;
-}
-
-void Find(){
-
-    for(int i=0;i<n;i++){
-        dfs(0,i);
+    int temp = -1;
+    for(i = x ; i < n ; i ++)
+    if(!v[i] && map[i] != temp)
+    {
+        if(num + map[i] > sum) continue;
+        v[i] = 1;
+        temp = map[i];
+        ans[cur] = i;
+        dfs(i,num + map[i],cur + 1);
+        v[i] = 0;
     }
 }
 int main()
 {
-    while(scanf("%d%d",&t,&n)!=EOF){
-
-        if(n==0) break;
-
-        for(int i=0;i<n;i++){
-            scanf("%d",&a[i]);
+    int i;
+    while(scanf("%d%d",&sum,&n) && n)
+    {
+        int t = 0 ;
+        for(i = 0 ; i < n ; i ++)
+        {
+            scanf("%d",&map[i]);
+            t += map[i];
         }
-
-        memset(pre,-1,sizeof(pre));
-       Find();
+        printf("Sums of %d:\n",sum);
+        if(t < sum){printf("NONE\n");continue;}
+        memset(v,0,sizeof(v));
+        flag = 0;
+        dfs(0,0,0);
+        if(!flag) printf("NONE\n");
     }
     return 0;
 }
