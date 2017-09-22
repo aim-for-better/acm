@@ -1,0 +1,77 @@
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<string>
+#include<algorithm>
+using namespace std;
+const int maxn=5005;
+
+int a[maxn*4];
+int x[maxn];
+
+void pushup(int i){
+
+    a[i]=a[i<<1]+a[i<<1|1];
+}
+
+void build(int l,int r,int i){
+
+    a[i]=0;
+    if(l==r){
+        return ;
+    }
+    int mid=l+(r-l)/2;
+    build(l,mid,i<<1);
+    build(mid+1,r,i<<1|1);
+
+}
+
+void update(int p,int l,int r,int i){
+    if(l==r){a[i]++;return;}
+    int mid=l+(r-l)/2;
+    if(p<=mid) update(p,l,mid,i<<1);
+    else update(p,mid+1,r,i<<1|1);
+    pushup(i);
+}
+
+int query(int ql,int qr,int l,int r,int i){
+
+    if(ql<=l&&r<=qr){
+
+        return a[i];
+    }
+    int ans=0;
+    int mid=l+(r-l)/2;
+    if(qr<=mid) ans+=query(ql,qr,l,mid,i<<1);
+    else if(ql>mid) ans+=query(ql,qr,mid+1,r,i<<1|1);
+    else{
+        ans+=query(ql,qr,l,mid,i<<1);
+        ans+=query(ql,qr,mid+1,r,i<<1|1);
+    }
+    return ans;
+}
+
+int main()
+{
+    int n;
+    int sum=0;
+    while(scanf("%d",&n)!=EOF){
+
+        memset(a,0,sizeof(a));
+        build(0,n-1,1);
+        for(int i=0;i<n;i++){
+
+            scanf("%d",&x[i]);
+            sum+=query(x[i],n-1,0,n-1,1);
+            update(x[i],0,n-1,1);
+        }
+        int tmp=sum;
+        for(int i=0;i<n;i++){
+
+            sum+=(n-2*x[i]-1);
+            tmp=min(tmp,sum);
+        }
+        printf("%d\n",tmp);
+    }
+    return 0;
+}
